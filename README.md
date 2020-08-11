@@ -7,6 +7,8 @@ The library is designed around two principles:
 1. It should attempt to seamlessly integrate into standard Roblox Lua UI programming. There are no complex frameworks or big setups, this should feel familiar like using built-in UI objects.
 2. The style of the components should be easy to change so that developers can have functionality without having to sacrafice artistic direction.
 
+Documentation for each class/constructor is in the individual module. You can also see the test place for an example of the components in use.
+
 Currently GuiLib provides support for:
 
 * Checkbox Labels
@@ -17,9 +19,10 @@ Currently GuiLib provides support for:
 * Scrolling Lists
 * Radial Menu
 
-To see documentation for each class/constructor please read the individual module.
+![](Test/Images/assorted.gif)
 
-# Building project
+![](Test/Images/dropdown.gif)
 
-```Lua
-```
+![](Test/Images/slider.gif)
+
+![](Test/Images/radialmenu.gif)
