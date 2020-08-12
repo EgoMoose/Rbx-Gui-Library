@@ -52,10 +52,16 @@ local GuiLib = script.Parent.Parent
 local Lazy = require(GuiLib:WaitForChild("LazyLoader"))
 local Defaults = GuiLib:WaitForChild("Defaults")
 
+local UIS = game:GetService("UserInputService")
 local RUNSERVICE = game:GetService("RunService")
 
 local SLIDER_FRAMEX = Defaults:WaitForChild("SliderFrameX")
 local SLIDER_FRAMEY = Defaults:WaitForChild("SliderFrameY")
+
+local XBOX_STEP = 0.01
+local DEBOUNCE_TICK = 0.1
+local XBOX_DEADZONE = 0.35
+local THUMBSTICK = Enum.KeyCode.Thumbstick2
 
 -- Class
 
@@ -147,6 +153,26 @@ function init(self)
 	maid:Mark(frame:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateBounds))
 	maid:Mark(frame:GetPropertyChangedSignal("Parent"):Connect(updateBounds))
 	
+	-- Move the slider when the xbox moves it
+	local xboxDir = 0
+	local xboxTick = 0
+	local xboxSelected = false
+	
+	maid:Mark(dragger.SelectionGained:Connect(function()
+		xboxSelected = true
+	end))
+	
+	maid:Mark(dragger.SelectionLost:Connect(function()
+		xboxSelected = false
+	end))
+	
+	maid:Mark(UIS.InputChanged:Connect(function(input, process)
+		if (process and input.KeyCode == THUMBSTICK) then
+			local pos = input.Position
+			xboxDir = math.abs(pos[axis]) > XBOX_DEADZONE and math.sign(pos[axis]) or 0
+		end
+	end))
+	
 	-- Move the slider when we drag it
 	maid:Mark(dragTracker.DragChanged:Connect(function(element, input, delta)
 		if (self.IsActive) then
@@ -167,6 +193,16 @@ function init(self)
 	
 	-- position the slider
 	maid:Mark(RUNSERVICE.RenderStepped:Connect(function(dt)
+		if (xboxSelected) then
+			local t = tick()
+			if (self.Interval <= 0) then
+				self:Set(self:Get() + xboxDir*XBOX_STEP*dt*60)
+			elseif (t - xboxTick > DEBOUNCE_TICK) then
+				xboxTick = t
+				self:Set(self:Get() + self.Interval*xboxDir)
+			end
+		end
+		
 		spring:Update(dt)
 		local x = spring.x
 		if (x ~= last) then

@@ -16,6 +16,9 @@ Properties:
  		> The rotation offset that the developer entered as an argument when creating the radial menu.
 	SubN [integer]
 		> The number of subsections that the developer entered as an argument when creating the radial menu.
+	Enabled [boolean]
+		> Whether or not the radial menu is actively tracking input.
+		> Defaults to true
 	DeadZoneIn [float]
 		> Number represents a percentage from the radius that will be ignored in regards to input
 		> By default this is 0.5 meaning the center 50% of the radial frame ignores input
@@ -113,6 +116,7 @@ function RadialMenuClass.new(subN, tPercent, rotation)
 	self.Rotation = rotation
 	self.SubN = subN
 	
+	self.Enabled = true
 	self.DeadZoneIn = 0.5
 	self.DeadZoneOut = math.huge
 	
@@ -160,6 +164,11 @@ function init(self)
 	local lTheta = 0
 	
 	self._Maid:Mark(UIS.InputBegan:Connect(function(input)
+		if (not self.Enabled) then
+			return
+		end
+		
+		
 		if (GAMEPAD_GROUP[input.UserInputType]) then
 			if (not GAMEPAD_CLICK[input.KeyCode]) then
 				return
@@ -175,6 +184,10 @@ function init(self)
 	end))
 
 	self._Maid:Mark(RUNSERVICE.RenderStepped:Connect(function(dt)
+		if (not self.Enabled) then
+			return
+		end
+		
 		local theta = self:GetTheta(inputType)
 		if (theta and self:IsVisible()) then
 			lTheta = theta
@@ -259,7 +272,7 @@ function RadialMenuClass:IsVisible()
 	local frame = self.Frame
 	while (frame and frame:IsA("GuiObject") and frame.Visible) do
 		frame = frame.Parent
-		if (frame:IsA("ScreenGui") and frame.Enabled) then
+		if (frame and frame:IsA("ScreenGui") and frame.Enabled) then
 			return true
 		end
 	end
