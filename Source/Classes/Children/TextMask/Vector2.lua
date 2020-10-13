@@ -39,7 +39,7 @@ end
 function Mask:ToType(text)
 	text = self:Verify(text) and text or self.Default
 	
-	local components = string.split(text, ", ")
+	local components = string.split(text, ",")
 	for i, c in next, components do
 		components[i] = tonumber(c)
 	end
