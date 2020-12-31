@@ -118,30 +118,28 @@ function TextMaskClass:SetMaskType(name)
 		-- Initialize text to 0, consumer can override
 		self.Frame.Text = 0
 
-		self.incrementButton = INCREMENT_BUTTON:Clone()
-		self.incrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, 0)
-		self.incrementButton.Activated:Connect(function()
+		self.IncrementButton = INCREMENT_BUTTON:Clone()
+		self.IncrementButton.AnchorPoint = Vector2.new(1, 0)
+		self.IncrementButton.Position = UDim2.new(1, 0, 0, 0)
+		self._Maid:Mark(self.IncrementButton.Activated:Connect(function()
 			self.Frame.Text = tonumber(self.Frame.Text) + 1
-		end)
-		self.incrementButton.Parent = self.Frame
+		end))
+		self.IncrementButton.Parent = self.Frame
+		self._Maid:Mark(self.IncrementButton)
 		
-		self.decrementButton = DECREMENT_BUTTON:Clone()
-		self.decrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, self.Frame.AbsoluteSize.Y / 2)
-		self.decrementButton.Activated:Connect(function()
+		self.DecrementButton = DECREMENT_BUTTON:Clone()
+		self.DecrementButton.AnchorPoint = Vector2.new(1, 1)
+		self.DecrementButton.Position = UDim2.new(1, 0, 1, 0)
+		self._Maid:Mark(self.DecrementButton.Activated:Connect(function()
 			self.Frame.Text = tonumber(self.Frame.Text) - 1
-		end)
-		self.decrementButton.Parent = self.Frame
+		end))
+		self.DecrementButton.Parent = self.Frame
+		self._Maid:Mark(self.DecrementButton)
 	end
 end
 
 function TextMaskClass:Destroy()
 	self._Maid:Sweep()
-	if self.IncrementButton then
-		self.IncrementButton:Destroy()
-	end
-	if self.DecrementButton then
-		self.DecrementButton:Destroy()
-	end
 end
 
 --
