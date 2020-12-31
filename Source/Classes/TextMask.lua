@@ -32,6 +32,10 @@ Methods:
 
 local GuiLib = script.Parent.Parent
 local Lazy = require(GuiLib:WaitForChild("LazyLoader"))
+local Defaults = GuiLib:WaitForChild("Defaults")
+
+local INCREMENT_BUTTON = Defaults:WaitForChild("IncrementButton")
+local DECREMENT_BUTTON = Defaults:WaitForChild("DecrementButton")
 
 local WARN_MSG = "%s is not a valid mask. Defaulting to 'String' mask."
 
@@ -105,10 +109,36 @@ function TextMaskClass:SetMaskType(name)
 	end
 	self._MaskType = mask
 	self.Frame.Text = mask:Process(self.Frame.Text):sub(1, self._MaxLength)
+	
+	-- Add increment/decrement buttons for numeric inputs
+	if name == "Number" then
+		-- Initialize text to 0, consumer can override
+		self.Frame.Text = 0
+
+		self.incrementButton = INCREMENT_BUTTON:Clone()
+		self.incrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, 0)
+		self.incrementButton.Activated:Connect(function()
+			self.Frame.Text = tonumber(self.Frame.Text) + 1
+		end)
+		self.incrementButton.Parent = self.Frame
+		
+		self.decrementButton = DECREMENT_BUTTON:Clone()
+		self.decrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, self.Frame.AbsoluteSize.Y / 2)
+		self.decrementButton.Activated:Connect(function()
+			self.Frame.Text = tonumber(self.Frame.Text) - 1
+		end)
+		self.decrementButton.Parent = self.Frame
+	end
 end
 
 function TextMaskClass:Destroy()
 	self._Maid:Sweep()
+	if self.IncrementButton then
+		self.IncrementButton:Destroy()
+	end
+	if self.DecrementButton then
+		self.DecrementButton:Destroy()
+	end
 end
 
 --

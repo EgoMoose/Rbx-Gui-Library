@@ -35,7 +35,8 @@ function Mask:Verify(text)
 			return not new
 		end
 		
-		return true
+		-- Empty string is not a number
+		return text ~= ""
 	end
 	return false
 end
