@@ -32,6 +32,13 @@ Methods:
 
 local GuiLib = script.Parent.Parent
 local Lazy = require(GuiLib:WaitForChild("LazyLoader"))
+local Defaults = GuiLib:WaitForChild("Defaults")
+
+local ARROW_UP = "rbxassetid://5154078925"
+local ARROW_DOWN = "rbxassetid://5143165549"
+
+local INCREMENT_BUTTON = Defaults:WaitForChild("IncrementButton")
+local DECREMENT_BUTTON = Defaults:WaitForChild("DecrementButton")
 
 local WARN_MSG = "%s is not a valid mask. Defaulting to 'String' mask."
 
@@ -105,6 +112,26 @@ function TextMaskClass:SetMaskType(name)
 	end
 	self._MaskType = mask
 	self.Frame.Text = mask:Process(self.Frame.Text):sub(1, self._MaxLength)
+	
+	-- Add increment/decrement buttons for numeric inputs
+	if name == "Number" then
+		-- Initialize text to 0, consumer can override
+		self.Frame.Text = 0
+
+		local incrementButton = INCREMENT_BUTTON:Clone()
+		incrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, 0)
+		incrementButton.Activated:Connect(function()
+			self.Frame.Text = tonumber(self.Frame.Text) + 1
+		end)
+		incrementButton.Parent = self.Frame
+		
+		local decrementButton = DECREMENT_BUTTON:Clone()
+		decrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, self.Frame.AbsoluteSize.Y / 2)
+		decrementButton.Activated:Connect(function()
+			self.Frame.Text = tonumber(self.Frame.Text) - 1
+		end)
+		decrementButton.Parent = self.Frame
+	end
 end
 
 function TextMaskClass:Destroy()
