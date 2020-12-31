@@ -34,9 +34,6 @@ local GuiLib = script.Parent.Parent
 local Lazy = require(GuiLib:WaitForChild("LazyLoader"))
 local Defaults = GuiLib:WaitForChild("Defaults")
 
-local ARROW_UP = "rbxassetid://5154078925"
-local ARROW_DOWN = "rbxassetid://5143165549"
-
 local INCREMENT_BUTTON = Defaults:WaitForChild("IncrementButton")
 local DECREMENT_BUTTON = Defaults:WaitForChild("DecrementButton")
 
@@ -136,6 +133,12 @@ end
 
 function TextMaskClass:Destroy()
 	self._Maid:Sweep()
+	if self.IncrementButton then
+		self.IncrementButton:Destroy()
+	end
+	if self.DecrementButton then
+		self.DecrementButton:Destroy()
+	end
 end
 
 --
