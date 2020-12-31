@@ -115,19 +115,19 @@ function TextMaskClass:SetMaskType(name)
 		-- Initialize text to 0, consumer can override
 		self.Frame.Text = 0
 
-		local incrementButton = INCREMENT_BUTTON:Clone()
-		incrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, 0)
-		incrementButton.Activated:Connect(function()
+		self.incrementButton = INCREMENT_BUTTON:Clone()
+		self.incrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, 0)
+		self.incrementButton.Activated:Connect(function()
 			self.Frame.Text = tonumber(self.Frame.Text) + 1
 		end)
-		incrementButton.Parent = self.Frame
+		self.incrementButton.Parent = self.Frame
 		
-		local decrementButton = DECREMENT_BUTTON:Clone()
-		decrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, self.Frame.AbsoluteSize.Y / 2)
-		decrementButton.Activated:Connect(function()
+		self.decrementButton = DECREMENT_BUTTON:Clone()
+		self.decrementButton.Position = UDim2.new(0, self.Frame.AbsoluteSize.X - self.Frame.AbsoluteSize.Y / 2, 0, self.Frame.AbsoluteSize.Y / 2)
+		self.decrementButton.Activated:Connect(function()
 			self.Frame.Text = tonumber(self.Frame.Text) - 1
 		end)
-		decrementButton.Parent = self.Frame
+		self.decrementButton.Parent = self.Frame
 	end
 end
 
