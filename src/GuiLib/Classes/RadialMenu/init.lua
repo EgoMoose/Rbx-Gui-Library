@@ -63,7 +63,7 @@ local Defaults = GuiLib:WaitForChild("Defaults")
 
 local UIS = game:GetService("UserInputService")
 local RUNSERVICE = game:GetService("RunService")
-local CONSTANTS = Lazy.Classes.Children.RadialMenu.CONSTANTS
+local CONSTANTS = require(script:WaitForChild("CONSTANTS"))
 
 local PI = math.pi
 local TAU = CONSTANTS.TAU
@@ -90,7 +90,7 @@ local GAMEPAD_GROUP = {
 	[Enum.UserInputType.Gamepad8] = true
 }
 
-local CreateRadial = Lazy.Classes.Children.RadialMenu.CreateRadial
+local CreateRadial = require(script:WaitForChild("CreateRadial"))
 
 -- Class
 

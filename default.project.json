@@ -1,0 +1,10 @@
+{
+	"name": "Rbx-Gui-Library",
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"$path": "src"
+		}
+	}
+}

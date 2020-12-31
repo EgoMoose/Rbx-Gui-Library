@@ -39,7 +39,10 @@ local DECREMENT_BUTTON = Defaults:WaitForChild("DecrementButton")
 
 local WARN_MSG = "%s is not a valid mask. Defaulting to 'String' mask."
 
-local MASKS = Lazy.Classes.Children.TextMask
+local MASKS = {}
+for _, module in pairs(script:GetChildren()) do
+	MASKS[module.Name] = require(module)
+end
 
 -- Class
 
