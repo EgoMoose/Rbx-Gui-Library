@@ -17,7 +17,7 @@ Properties:
 	Frame [instance]
 		> The container frame for the slider. Can be used for positioning and resizing.
 	Interval [number] [0, 1]
- 		> Set this to force an interval step on the slider. For example if you only wanted steps of 1/10th then you'd write
+		> Set this to force an interval step on the slider. For example if you only wanted steps of 1/10th then you'd write
 		> Slider.Interval = 0.1
 	IsActive [boolean]
 		> When true the slider can be interacted with by the user, when false its values can only be set by the developer.
@@ -142,13 +142,13 @@ function init(self)
 	
 	local last = -1
 	local bPos, bSize
+	local initialBoundsCalculated = false
 	local function updateBounds()
 		bPos, bSize = getBounds(self)
 		background.Size = setUdim2(bSize / frame.AbsoluteSize[axis], 1)
 		last = -1
 	end
 	
-	updateBounds()
 	maid:Mark(frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateBounds))
 	maid:Mark(frame:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateBounds))
 	maid:Mark(frame:GetPropertyChangedSignal("Parent"):Connect(updateBounds))
@@ -193,6 +193,12 @@ function init(self)
 	
 	-- position the slider
 	maid:Mark(RUNSERVICE.RenderStepped:Connect(function(dt)
+		if not initialBoundsCalculated then
+			-- update on first rendered frame to make sure absolute sizes are correct
+			updateBounds()
+			initialBoundsCalculated = true
+		end
+
 		if (xboxSelected) then
 			local t = tick()
 			if (self.Interval <= 0) then
@@ -206,7 +212,9 @@ function init(self)
 		spring:Update(dt)
 		local x = spring.x
 		if (x ~= last) then
-			local scalePos = (bPos + (x * bSize) - frame.AbsolutePosition[axis]) / frame.AbsoluteSize[axis]
+			local aPos = frame.AbsolutePosition[axis]
+			local aSize = frame.AbsoluteSize[axis]
+			local scalePos = (bPos + (x * bSize) - aPos) / aSize
 			dragger.Position = setUdim2(scalePos, 0.5)
 			self._ChangedBind:Fire(self:Get())
 			last = x
