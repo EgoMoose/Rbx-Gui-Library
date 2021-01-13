@@ -206,7 +206,9 @@ function init(self)
 		spring:Update(dt)
 		local x = spring.x
 		if (x ~= last) then
-			local scalePos = (bPos + (x * bSize) - frame.AbsolutePosition[axis]) / frame.AbsoluteSize[axis]
+			local aPos = frame.AbsolutePosition[axis] -- AbsolutePosition and AbsoluteSize can return wrong values on the first frame 
+      local aSize = frame.AbsoluteSize[axis] -- Storing these in variables resolves this race condition somehow
+      local scalePos = (bPos + (x * bSize) - aPos) / aSize
 			dragger.Position = setUdim2(scalePos, 0.5)
 			self._ChangedBind:Fire(self:Get())
 			last = x
