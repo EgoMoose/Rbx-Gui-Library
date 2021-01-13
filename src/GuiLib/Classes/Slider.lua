@@ -194,6 +194,7 @@ function init(self)
 	-- position the slider
 	maid:Mark(RUNSERVICE.RenderStepped:Connect(function(dt)
 		if not initialBoundsCalculated then
+			-- update on first rendered frame to make sure absolute sizes are correct
 			updateBounds()
 			initialBoundsCalculated = true
 		end
@@ -211,8 +212,8 @@ function init(self)
 		spring:Update(dt)
 		local x = spring.x
 		if (x ~= last) then
-			local aPos = frame.AbsolutePosition[axis] -- AbsolutePosition and AbsoluteSize can return wrong values on the first frame 
-			local aSize = frame.AbsoluteSize[axis] -- Storing these in variables resolves this race condition somehow
+			local aPos = frame.AbsolutePosition[axis]
+			local aSize = frame.AbsoluteSize[axis]
 			local scalePos = (bPos + (x * bSize) - aPos) / aSize
 			dragger.Position = setUdim2(scalePos, 0.5)
 			self._ChangedBind:Fire(self:Get())
