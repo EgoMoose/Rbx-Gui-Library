@@ -142,13 +142,13 @@ function init(self)
 	
 	local last = -1
 	local bPos, bSize
+	local initialBoundsCalculated = false
 	local function updateBounds()
 		bPos, bSize = getBounds(self)
 		background.Size = setUdim2(bSize / frame.AbsoluteSize[axis], 1)
 		last = -1
 	end
 	
-	updateBounds()
 	maid:Mark(frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateBounds))
 	maid:Mark(frame:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateBounds))
 	maid:Mark(frame:GetPropertyChangedSignal("Parent"):Connect(updateBounds))
@@ -193,6 +193,11 @@ function init(self)
 	
 	-- position the slider
 	maid:Mark(RUNSERVICE.RenderStepped:Connect(function(dt)
+		if not initialBoundsCalculated then
+			updateBounds()
+			initialBoundsCalculated = true
+		end
+
 		if (xboxSelected) then
 			local t = tick()
 			if (self.Interval <= 0) then
