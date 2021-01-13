@@ -17,7 +17,7 @@ Properties:
 	Frame [instance]
 		> The container frame for the slider. Can be used for positioning and resizing.
 	Interval [number] [0, 1]
- 		> Set this to force an interval step on the slider. For example if you only wanted steps of 1/10th then you'd write
+		> Set this to force an interval step on the slider. For example if you only wanted steps of 1/10th then you'd write
 		> Slider.Interval = 0.1
 	IsActive [boolean]
 		> When true the slider can be interacted with by the user, when false its values can only be set by the developer.
@@ -207,8 +207,8 @@ function init(self)
 		local x = spring.x
 		if (x ~= last) then
 			local aPos = frame.AbsolutePosition[axis] -- AbsolutePosition and AbsoluteSize can return wrong values on the first frame 
-      local aSize = frame.AbsoluteSize[axis] -- Storing these in variables resolves this race condition somehow
-      local scalePos = (bPos + (x * bSize) - aPos) / aSize
+			local aSize = frame.AbsoluteSize[axis] -- Storing these in variables resolves this race condition somehow
+			local scalePos = (bPos + (x * bSize) - aPos) / aSize
 			dragger.Position = setUdim2(scalePos, 0.5)
 			self._ChangedBind:Fire(self:Get())
 			last = x
